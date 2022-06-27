@@ -1,4 +1,4 @@
-# frontend-challenge-by-codesh
+# Pharma Inc
 
 ## How to run
 
@@ -126,14 +126,14 @@ Ao acessar a aplicação diretamente por essa URL a aplicação deve abrir o mod
 - A URL deve conter o ID do paciente ❌
 - Abrir o modal com as informações do paciente ao acessar a aplicação por essa URL
 
-NOTA: A API randomiza os pacientes, ou seja, o ID do link não é o mesmo após o próximo fetch.
+***NOTA: A API randomiza os pacientes, ou seja, o ID do link não é o mesmo após o próximo fetch.
 
 ## Extras
 
 Além do desafio proposto com as duas telas, temos alguns diferenciais:
 
 - **Diferencial 1** Adicionar um filtro por Gênero na tabela; ✅
-- **Diferencial 2** Configurar o buscador para poder filtrar por nome e nacionalidade; ✅ NOTA: API não tem filtro por nome
+- **Diferencial 2** Configurar o buscador para poder filtrar por nome e nacionalidade; ✅ ***NOTA: API não tem filtro por nome
 - **Diferencial 3** Adicionar o paginador rota para facilitar compartilhar o link e manter a posição na lista; ✅
 - **Diferencial 4** Escrever Unit Tests ou E2E Test na Lista de Pacientes. Escolher a melhor abordagem e biblioteca; ❌
 - **Diferencial 5** Configurar Docker no Projeto para facilitar o Deploy da equipe de DevOps; ❌
