@@ -1,44 +1,30 @@
 # frontend-challenge-by-codesh
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## How to run
 
 ```sh
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
+
 ```
 
-### Compile and Minify for Production
+## Technologies
 
-```sh
-npm run build
-```
+The main technologies used in the construction of this project:
 
-### Lint with [ESLint](https://eslint.org/)
+<a href="https://vuejs.org/">
+<img width="50" title="Vue" alt="Vue" src="https://www.cupcom.com.br/wp-content/uploads/2020/10/IMAGENS-SITEuv-vuejs.jpg">
+</a> &#xa0; &#xa0;
 
-```sh
-npm run lint
-```
+<a href="https://eslint.org">
+  <img  width="50" title="Eslint" alt="Eslint" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/eslint/eslint.png">
+</a> &#xa0; &#xa0;
 
+<br>
+<br>
 
-
-
-
-# Front-End Challenge 🏅
+# Front-End Challenge[pt-BR] 🏅
 
 ## Introdução
 
@@ -65,14 +51,13 @@ O seu objetivo nesse projeto, é trabalhar no desenvolvimento do Front end que c
 2. Utilizar React.js ou Vue.js ou Angular 8+ para construir a solução do Challenge;
 3. Utilizar Frameworks CSS ou estilo proprio, recomendamos alguns como:
 
-      - Tailwind CSS: https://tailwindcss.com/
-      - Material UI: https://material-ui.com/
-      - Angular Material: https://material.angular.io/
-      - Bootstrap: https://getbootstrap.com/
-      - Bulma: https://bulma.io/
+   - Tailwind CSS: https://tailwindcss.com/
+   - Material UI: https://material-ui.com/
+   - Angular Material: https://material.angular.io/
+   - Bootstrap: https://getbootstrap.com/
+   - Bulma: https://bulma.io/
 
 4. Trabalhar em um repositório em seu usuário ou utilizar o seu github pessoal (não esqueça de colocar no readme a referência a este challenge);
-
 
 ## Lista de Pacientes
 
@@ -88,29 +73,29 @@ Exemplo da resposta:
 
 ```json
 {
-   "results": [
-       {
-           "gender": "female",
-           "name": {
-               "title": "Ms",
-               "first": "Alea",
-               "last": "Christoffersen"
-           }
-       }
-   ],
-   "info": {
-       "seed": "2f10116f1799d353",
-       "results": 1,
-       "page": 1,
-       "version": "1.3"
-   }
+  "results": [
+    {
+      "gender": "female",
+      "name": {
+        "title": "Ms",
+        "first": "Alea",
+        "last": "Christoffersen"
+      }
+    }
+  ],
+  "info": {
+    "seed": "2f10116f1799d353",
+    "results": 1,
+    "page": 1,
+    "version": "1.3"
+  }
 }
 ```
 
 Além de realizar a request, devemos aplicar alguns filtros na API:
 
 - O resultado da API deve ser armazenado em um estado global. (Pode ser utilizado Redux, Context, Vuex ou tecnologia equivalente do framework utilizado)
-- Limitar cada requisição da página em  50 resultados para não sobrecarregar a API.
+- Limitar cada requisição da página em 50 resultados para não sobrecarregar a API.
 - Adicionar o parâmetro de paginação para controlar o `Loading more`
 
 ### Visualizar paciente
@@ -119,44 +104,46 @@ Na coluna de ações da tabela, existe o botão visualizar para expandir os dado
 
 ![View user](assets/view.png)
 
-Devemos exibir os seguintes campos do paciente:
+Devemos exibir os seguintes campos do paciente: ✅
 
-- Imagem
-- Nome completo
-- Email
-- Gênero
-- Data de nascimento
-- Telefone
-- Nacionalidade
-- Endereço
-- ID (Número de identificação)
-- URL para compartilhamento
+- Imagem ✅
+- Nome completo ✅
+- Email ✅
+- Gênero ✅
+- Data de nascimento ✅
+- Telefone ✅
+- Nacionalidade ✅
+- Endereço ✅
+- ID (Número de identificação) ✅
+- URL para compartilhamento ✅
 
-### URL para compartilhar paciente
+### URL para compartilhar paciente ✅
 
-Ao acessar a aplicação diretamente por essa URL a aplicação deve abrir o modal com as informações do paciente. 
+Ao acessar a aplicação diretamente por essa URL a aplicação deve abrir o modal com as informações do paciente.
 
-- A URL deve conter o ID do paciente
+- A URL deve conter o ID do paciente ❌
 - Abrir o modal com as informações do paciente ao acessar a aplicação por essa URL
+
+NOTA: A API randomiza os pacientes, ou seja, o ID do link não é o mesmo após o próximo fetch.
 
 ## Extras
 
 Além do desafio proposto com as duas telas, temos alguns diferenciais:
 
-- **Diferencial 1** Adicionar um filtro por Gênero na tabela;
-- **Diferencial 2** Configurar o buscador para poder filtrar por nome e nacionalidade;
-- **Diferencial 3** Adicionar o paginador rota para facilitar compartilhar o link e manter a posição na lista;
-- **Diferencial 4** Escrever Unit Tests ou E2E Test na Lista de Pacientes. Escolher a melhor abordagem e biblioteca;
-- **Diferencial 5** Configurar Docker no Projeto para facilitar o Deploy da equipe de DevOps;
+- **Diferencial 1** Adicionar um filtro por Gênero na tabela; ✅
+- **Diferencial 2** Configurar o buscador para poder filtrar por nome e nacionalidade; ✅ NOTA: API não tem filtro por nome
+- **Diferencial 3** Adicionar o paginador rota para facilitar compartilhar o link e manter a posição na lista; ✅
+- **Diferencial 4** Escrever Unit Tests ou E2E Test na Lista de Pacientes. Escolher a melhor abordagem e biblioteca; ❌
+- **Diferencial 5** Configurar Docker no Projeto para facilitar o Deploy da equipe de DevOps; ❌
 
 ## Readme do Repositório
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh 
+- Deve conter o título do projeto ✅
+- Uma descrição sobre o projeto em frase ✅
+- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas ✅
+- Como instalar e usar o projeto (instruções) ✅
+- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore) ✅
+- Se está usando github pessoal, referencie que é um challenge by coodesh ✅
 
 ## Finalização e Instruções para a Apresentação
 
@@ -172,9 +159,6 @@ Avisar sobre a finalização e enviar para correção.
 8. Confira a vaga desejada;
 9. Envie e aguarde as instruções para seguir no processo. Sucesso e boa sorte. =)
 
-
 ## Suporte
 
 Use a [nossa comunidade](https://coodesh.com/desenvolvedores#community) para tirar dúvidas sobre o processo ou envie um e-mail para contato@coodesh.com.
-
-
