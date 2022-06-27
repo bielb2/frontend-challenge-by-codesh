@@ -1,14 +1,21 @@
 <script>
+import axios from "axios";
+
 import InputText from "primevue/InputText";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import Avatar from "primevue/avatar";
-import image from "@/assets/img/companyLogo.jpg";
+import Paginator from "primevue/paginator";
+import Skeleton from "primevue/skeleton";
+import Dropdown from "primevue/dropdown";
+
+import { delay } from "@/utils/delay";
 
 import { usePatientStore } from "@/stores/patient";
-import axios from "axios";
+
+import { mockedData } from "./mockedData";
 
 export default {
   name: "HomeView",
@@ -19,70 +26,154 @@ export default {
     Button,
     Dialog,
     Avatar,
+    Paginator,
+    Skeleton,
+    Dropdown,
   },
-  data() {
-    const store = usePatientStore();
 
+  data() {
     return {
-      users: [
-        {
-          id: "1000",
-          code: "f230fh0g3",
-          name: "Bamboo Watch",
-          description: "Product Description",
-          image: "bamboo-watch.jpg",
-          price: 65,
-          category: "Accessories",
-          quantity: 24,
-          inventoryStatus: "INSTOCK",
-          rating: 5,
-          gender: "Female",
-          birth: "21/08/11",
-        },
-        {
-          id: "2222",
-          code: "f230fh0g3",
-          name: "Abc Watch",
-          description: "Product Description",
-          image: "bamboo-watch.jpg",
-          price: 65,
-          category: "Accessories",
-          quantity: 24,
-          inventoryStatus: "INSTOCK",
-          rating: 5,
-          gender: "Female",
-          birth: "11/08/11",
-        },
-      ],
-      id: "",
+      patients: [],
+      isFetchingPatients: false,
       modalData: undefined,
-      image: image,
+      mockedData: mockedData,
+      isModalOpen: false,
+      gender: [
+        { name: "Female", value: "female" },
+        { name: "Male", value: "male" },
+      ],
+      filterData: [
+        { name: "Name", value: "name" },
+        { name: "Nat", value: "nat" },
+      ],
+      selectedGender: null,
+      selectedFilter: { name: "Name", value: "name" },
+      filterValue: "",
     };
   },
   methods: {
-    teste() {
-      this.msg = "Hello ASDF";
-    },
     viewUser(data) {
       this.modalData = data;
+      this.isModalOpen = true;
     },
     async getUser() {
       try {
         const store = usePatientStore();
 
-        const patients = await axios.get(
-          "https://randomuser.me/api/?page=1&results=50"
-        );
+        this.isFetchingPatients = true;
 
-        store.setPatients(patients.data);
+        let apiLink = `https://randomuser.me/api/?${
+          this.$route.fullPath.split("?")[1]
+        }`;
+
+        const res = await axios.get(apiLink);
+
+        if (res.status === 200) {
+          await delay();
+
+          this.isFetchingPatients = false;
+
+          if (this.$route.params?.id != null) {
+            this.modalData = res.data.results.find((p) => {
+              return p.login.uuid === this.$route.params.id;
+            });
+          }
+
+          store.setPatients(res.data);
+
+          this.patients = res.data;
+        } else {
+          throw new Error("Check your internet connection");
+        }
       } catch (error) {
-        console.log(error);
+        this.isFetchingPatients = false;
       }
     },
+    onPage($event) {
+      const query = {
+        ...this.$route.query,
+        page: `${$event.page + 1}`,
+        results: `${$event.pageCount}`,
+      };
+
+      this.$router.push({
+        name: "home",
+        query,
+      });
+    },
+    onChangeGender($event) {
+      const { page, results } = this.$route.query;
+      const query = { page, results };
+      const value = $event.value.value;
+
+      if (this.$route.query?.gender === value) {
+        this.selectedGender = null;
+      } else {
+        query.gender = value;
+      }
+
+      this.$router.push({
+        name: "home",
+        query,
+      });
+    },
+    handleFilterValue($event) {
+      const timeoutId = window.setTimeout(() => {}, 0);
+      for (let id = timeoutId; id >= 0; id -= 1) {
+        window.clearTimeout(id);
+      }
+
+      setTimeout(() => {
+        const query = {
+          page: this.$route.query.page,
+          results: this.$route.query.results,
+          [this.selectedFilter.value]: $event.target.value,
+        };
+
+        this.$router.replace({
+          name: "home",
+          query,
+        });
+      }, 500);
+    },
   },
-  created() {},
   mounted() {
-    this.getUser();
+    const initialRoute = () => {
+      const query = { page: "1", results: "50" };
+
+      if (this?.$route.query.gender) {
+        query.gender = this?.$router.query.gender;
+      }
+
+      this.$router.replace({
+        name: "home",
+        query,
+      });
+    };
+
+    if (this.$route.query?.page == null) {
+      initialRoute();
+      return;
+    }
+
+    if (this.$route.params?.id != "") {
+      this.$router.replace({
+        name: "home",
+        params: { id: this.$route.params.id },
+        query: { page: this.$route.query.page, results: "50" },
+      });
+    } else {
+      initialRoute();
+    }
+  },
+  watch: {
+    "$route.query.page": {
+      handler: function () {
+        this.getUser();
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 };
 </script>
@@ -91,7 +182,6 @@ export default {
   <main class="main mt-8">
     <div class="flex align-center justify-content-center flex-column">
       <div>
-        {{ id }}
         <p class="text-900 line-height-3">
           Irure voluptate pariatur proident dolor voluptate ipsum. Est sunt quis
           dolor laborum ea est deserunt reprehenderit proident cillum. Consequat
@@ -106,17 +196,44 @@ export default {
           <InputText
             class="w-full"
             type="text"
-            v-model="value3"
             placeholder="Search"
+            v-model="filterValue"
+            @input="handleFilterValue($event)"
+          />
+          <Dropdown
+            v-model="selectedFilter"
+            :options="filterData"
+            optionLabel="name"
+            placeholder="Name"
+            class="absolute right-0"
           />
         </span>
       </div>
 
       <div>
-        <DataTable :value="users" showGridlines responsiveLayout="scroll">
-          <Column field="name" :sortable="true" header="Name"></Column>
-          <Column field="gender" :sortable="true" header="Gender"></Column>
-          <Column field="birth" header="Birth"></Column>
+        <DataTable
+          removableSort
+          :value="patients.results"
+          showGridlines
+          v-if="!isFetchingPatients"
+          responsiveLayout="scroll"
+          :rowHover="true"
+          dataKey="cell"
+          :rows="10"
+        >
+          <Column field="name.first" sortable header="Name">
+            <template #body="slotProps">
+              {{ `${slotProps.data.name.first} ${slotProps.data.name.last}` }}
+            </template>
+          </Column>
+          <Column field="gender" header="Gender"></Column>
+          <Column field="registered" header="Birth">
+            <template #body="slotProps">
+              {{
+                new Date(slotProps.data.registered.date).toLocaleDateString()
+              }}
+            </template>
+          </Column>
           <Column field="actions" header="Actions" :exportable="false">
             <template #body="slotProps">
               <Button
@@ -127,14 +244,62 @@ export default {
               >
             </template>
           </Column>
+          <Paginator
+            @page="onPage($event)"
+            v-model:first="offset"
+            :rows="1"
+            :totalRecords="50"
+          >
+            <template #end>
+              <div>
+                Página: {{ patients.info?.page }} - Total:
+                {{ patients.info?.results }}
+
+                <Dropdown
+                  @change="onChangeGender($event)"
+                  v-model="selectedGender"
+                  :options="gender"
+                  optionLabel="name"
+                  placeholder="Gender"
+                  class="w-8rem"
+                />
+              </div>
+            </template>
+          </Paginator>
+        </DataTable>
+
+        <DataTable :value="mockedData" v-else responsiveLayout="scroll">
+          <template #header>
+            <Skeleton></Skeleton>
+          </template>
+          <Column field="name" header="Name" sortable>
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="gender" header="Gender">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="birth" header="Birth">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="actions" header="Actions">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
         </DataTable>
       </div>
 
       <Dialog
-        v-model:visible="modalData"
+        v-model:visible="isModalOpen"
         :style="{ width: '30vw' }"
         :contentStyle="{ overflow: 'unset' }"
-        class="styled-dialog"
+        class="styled-dialog surface"
         header=" "
         :draggable="false"
       >
@@ -149,46 +314,59 @@ export default {
         </div>
         <div>
           <ul class="list-none list">
-            <li><span class="font-bold">Nome: </span>Gabriel Barros</li>
-            <li>Email: Gabriel Barros</li>
-            <li>Gênero: Gabriel Barros</li>
-            <li>Data de nascimento: Gabriel Barros</li>
-            <li>Telefone: Gabriel Barros</li>
-            <li>Nacionalidade: Gabriel Barros</li>
-            <li>Endereço: Gabriel Barros</li>
-            <li>Id: Gabriel Barros</li>
-            <li>URL: Gabriel Barros</li>
+            <li>
+              <span class="font-bold">Name: </span>
+              {{ `${modalData.name.first}${modalData.name.last}` }}
+            </li>
+            <li>
+              <span class="font-bold">Email: </span>
+              {{ modalData.email }}
+            </li>
+            <li>
+              <span class="font-bold">Gênero: </span>
+              {{ modalData.gender === "female" ? "Feminino" : "Masculino" }}
+            </li>
+            <li>
+              <span class="font-bold">Data de nascimento: </span>
+              {{ new Date(modalData.registered.date).toLocaleDateString() }}
+            </li>
+            <li>
+              <span class="font-bold">Telefone: </span>
+              {{ modalData.phone }}
+            </li>
+            <li>
+              <span class="font-bold">Nacionalidade: </span>
+              {{ modalData.nat }}
+            </li>
+            <li>
+              <span class="font-bold">Endereço: </span>
+              {{
+                `${modalData.location.street.name} - ${modalData.location.street.number} ${modalData.location.city} - ${modalData.location.state} - ${modalData.location.country}`
+              }}
+            </li>
+            <li v-show="modalData.id.value">
+              <span class="font-bold">ID: </span>
+              {{ `${modalData.id.name} - ${modalData.id.value}` }}
+            </li>
+            <li>
+              <span class="font-bold">URL: </span>
+              <a
+                :href="`localhost:3000/home/${modalData.login.uuid}?${
+                  this.$route.fullPath.split('?')[1]
+                }`"
+                class="cursor-pointer ml-1 text-800"
+              >
+                {{
+                  `localhost:3000/home/${modalData.login.uuid}?${
+                    this.$route.fullPath.split("?")[1]
+                  }`
+                }}
+              </a>
+            </li>
           </ul>
         </div>
       </Dialog>
     </div>
-    <!-- <Button
-      icon="pi pi-check"
-      iconPos="right"
-      label="Primary"
-      class="p-button-secondary"
-      @click="teste"
-      >{{ msg }}</Button
-    >
-
-    <ul>
-      <li v-for="technology in front_end" :key="technology">
-        {{ technology }}
-      </li>
-    </ul>
-    <ul>
-      <li v-for="technology in backend" :key="technology.id">
-        {{ technology.language }}
-      </li>
-    </ul>
-
-    <HelloWorld compEmail="asad@asd.com" :isOpen="false" /> -->
-    <!-- <HelloWorld :compEmail="msg" /> -->
-
-    <!-- <form @submit="asdf($event)"> -->
-    <!-- <form @submit.prevent="asdf"> -->
-    <!-- <input type="text" v-model="msg" /> -->
-    <!-- <button @click="one(txt, $event), second(txt2, $event)" v-show="disabled">  -->
   </main>
 </template>
 
