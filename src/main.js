@@ -20,9 +20,3 @@ app.use(createPinia());
 app.use(router);
 
 app.mount("#app");
-
-// v-if; v-else; v-show
-
-// dados dinamicos
-// <a :href="" />
-// <img :src :alt/>
