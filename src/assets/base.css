@@ -1,0 +1,22 @@
+
+
+
+body {
+  min-height: 100vh;
+  background: #e6f0fb;
+}
+
+#app {
+  width: 100%;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  height: 100%;
+  background-color: 
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
