@@ -24,7 +24,7 @@ The main technologies used in the construction of this project:
 <br>
 <br>
 
-# Front-End Challenge[pt-BR] ✅
+# Front-End Challenge [pt-BR] ✅
 
 Desafio concluído, especificações sobre conclusão e considerações finais logo abaixo.
 
