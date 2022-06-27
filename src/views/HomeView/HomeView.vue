@@ -103,6 +103,7 @@ export default {
     },
     onChangeGender($event) {
       const { page, results } = this.$route.query;
+
       const query = { page, results };
       const value = $event.value.value;
 
@@ -110,6 +111,10 @@ export default {
         this.selectedGender = null;
       } else {
         query.gender = value;
+      }
+
+      if (this.$route.query[this.selectedFilter.value] != null) {
+        query[this.selectedFilter.value] = this.selectedFilter.value;
       }
 
       this.$router.push({
@@ -130,6 +135,10 @@ export default {
           [this.selectedFilter.value]: $event.target.value,
         };
 
+        if (this.$route.query?.gender != null) {
+          query.gender = this.$route.query.gender;
+        }
+
         this.$router.replace({
           name: "home",
           query,
@@ -139,11 +148,7 @@ export default {
   },
   mounted() {
     const initialRoute = () => {
-      const query = { page: "1", results: "50" };
-
-      if (this?.$route.query.gender) {
-        query.gender = this?.$router.query.gender;
-      }
+      const query = { ...this.$route.query, page: "1", results: "50" };
 
       this.$router.replace({
         name: "home",
