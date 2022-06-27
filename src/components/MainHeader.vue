@@ -27,12 +27,12 @@ export default {
         size="large"
         class="cursor-pointer"
       />
-      <h1 class="ml-4">Company</h1>
+      <h1 class="ml-4">Pharma Inc</h1>
     </div>
 
     <div>
       <Avatar
-        alt="Vue logo"
+        alt="User"
         icon="pi pi-user"
         shape="circle"
         size="large"
