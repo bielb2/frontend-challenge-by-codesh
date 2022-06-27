@@ -1,4 +1,4 @@
-# frontend-challenge-by-codesh
+# Pharma Inc
 
 ## How to run
 
