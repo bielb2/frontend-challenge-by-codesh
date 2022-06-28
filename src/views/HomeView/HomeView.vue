@@ -114,7 +114,7 @@ export default {
       }
 
       if (this.$route.query[this.selectedFilter.value] != null) {
-        query[this.selectedFilter.value] = this.selectedFilter.value;
+        query[this.selectedFilter.value] = this.filterValue;
       }
 
       this.$router.push({
