@@ -4,7 +4,7 @@
 
 ```sh
 # Clone this project
-$ gitclone https://github.com/maurodesouza/frontend-challenge-by-codesh
+$ git clone https://github.com/maurodesouza/frontend-challenge-by-codesh
 
 # Enter in folder
 cd frontend-challenge-by-codesh
