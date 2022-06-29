@@ -15,6 +15,7 @@ npm install
 # To run the project
 npm run dev
 
+# The app will start in <http://localhost:3000>
 ```
 
 ## Technologies
