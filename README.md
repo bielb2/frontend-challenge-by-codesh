@@ -3,8 +3,16 @@
 ## How to run
 
 ```sh
+# Clone this project
+$ gitclone https://github.com/maurodesouza/frontend-challenge-by-codesh
+
+# Enter in folder
+cd frontend-challenge-by-codesh
+
+# Install the deps
 npm install
 
+# To run the project
 npm run dev
 
 ```
