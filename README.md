@@ -10,10 +10,10 @@ $ git clone https://github.com/maurodesouza/frontend-challenge-by-codesh
 cd frontend-challenge-by-codesh
 
 # Install the deps
-npm install
+npm install or yarn
 
-# To run the project
-npm run dev
+# To run
+npm run dev or yarn dev
 
 # The app will start in <http://localhost:3000>
 ```
