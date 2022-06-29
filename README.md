@@ -9,7 +9,7 @@ $ git clone https://github.com/bielb2/frontend-challenge-by-codesh
 # Enter in folder
 cd frontend-challenge-by-codesh
 
-# Install the deps
+# Install all deps
 npm install or yarn
 
 # To run
